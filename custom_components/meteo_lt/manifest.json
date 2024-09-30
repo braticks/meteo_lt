@@ -1,10 +1,10 @@
 {
   "domain": "meteo_lt",
   "name": "Meteo.lt",
-  "documentation": "https://github.com/yourusername/meteo_lt",
+  "documentation": "https://github.com/braticks/meteo_lt",
   "dependencies": [],
   "codeowners": ["@yourusername"],
   "requirements": ["requests"],
   "iot_class": "cloud_polling",
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
