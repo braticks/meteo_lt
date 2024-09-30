@@ -11,12 +11,16 @@ This custom integration allows you to integrate weather data from the Lithuanian
 
 ## Installation
 
-### HACS (Recommended)
+### HACS (Custom Repository)
 
 1. Ensure that [HACS](https://hacs.xyz/) is installed.
-2. Search for "Meteo.lt" in the HACS Integrations store.
-3. Click Install.
-4. Restart Home Assistant.
+2. Go to HACS > Integrations.
+3. Click on the three dots in the top right corner and select "Custom repositories".
+4. Add the URL of this repository (https://github.com/braticks/meteo_lt) and select "Integration" as the category.
+5. Click "Add".
+6. Search for "Meteo.lt" in the HACS Integrations store.
+7. Click Install.
+8. Restart Home Assistant.
 
 ### Manual Installation
 
