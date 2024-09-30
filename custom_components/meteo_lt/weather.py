@@ -14,28 +14,29 @@ class MeteoLtWeather(WeatherEntity):
         self._location = location
         self._attr_unique_id = f"meteo_lt_weather_{location}"
         self._attr_name = f"Meteo.lt Weather {location.capitalize()}"
+        self._attr_temperature = None
+        self._attr_humidity = None
+        self._attr_wind_speed = None
+        self._attr_condition = None
 
-    # Implement other required methods here
     @property
     def temperature(self):
-        # Implement temperature logic
-        return None
+        return self._attr_temperature
 
     @property
     def humidity(self):
-        # Implement humidity logic
-        return None
+        return self._attr_humidity
 
     @property
     def wind_speed(self):
-        # Implement wind speed logic
-        return None
+        return self._attr_wind_speed
 
     @property
     def condition(self):
-        # Implement condition logic
-        return None
+        return self._attr_condition
 
     async def async_update(self):
         # Implement update logic here
+        # This is where you'll fetch data from the Meteo.lt API
+        # and update self._attr_temperature, self._attr_humidity, etc.
         pass
