@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "location": "Location"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to Meteo.lt API",
+      "invalid_location": "Selected location is not valid"
+    },
+    "abort": {
+      "already_configured": "This location is already configured"
+    }
+  }
+}
