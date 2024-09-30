@@ -19,3 +19,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+async def async_setup(hass: HomeAssistant, config: dict) -> bool:
+    """Set up the Meteo.lt component."""
+    hass.data.setdefault(DOMAIN, {})
+    return True
