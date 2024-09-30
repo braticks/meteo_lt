@@ -1,6 +1,6 @@
 """Weather platform for Meteo.lt integration."""
 import logging
-import requests
+import aiohttp
 from homeassistant.components.weather import WeatherEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -15,6 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     """Set up Meteo.lt weather platform."""
     location = entry.data[CONF_LOCATION]
+    _LOGGER.debug("Setting up Meteo.lt weather for location: %s", location)
 
     coordinator = MeteoLtDataUpdateCoordinator(hass, location)
     await coordinator.async_config_entry_first_refresh()
@@ -27,30 +28,23 @@ class MeteoLtDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass: HomeAssistant, location: str):
         """Initialize."""
         self.location = location
-        super().__init__(
-            hass,
-            _LOGGER,
-            name="Meteo.lt",
-            update_interval=timedelta(minutes=30),
-        )
+        update_interval = timedelta(minutes=10)
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=update_interval)
 
     async def _async_update_data(self):
         """Fetch data from Meteo.lt."""
-        try:
-            response = requests.get(f"https://api.meteo.lt/v1/places/{self.location}/forecasts/long-term")
-            response.raise_for_status()
-            data = response.json()
-            return data
-        except requests.RequestException as err:
-            raise UpdateFailed(f"Error fetching data: {err}")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.meteo.lt/v1/places/{self.location}/forecasts/long-term") as response:
+                if response.status != 200:
+                    raise UpdateFailed(f"Error fetching data: {response.status}")
+                return await response.json()
 
 class MeteoLtWeather(CoordinatorEntity, WeatherEntity):
-    """Representation of a weather entity."""
+    """Representation of a weather condition."""
 
     def __init__(self, coordinator: MeteoLtDataUpdateCoordinator):
         """Initialize the weather entity."""
         super().__init__(coordinator)
-        self._attr_extra_state_attributes = {"location": coordinator.location}
 
     @property
     def name(self):
