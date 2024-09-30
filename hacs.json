@@ -1,0 +1,5 @@
+{
+    "name": "Meteo.lt",
+    "render_readme": true,
+    "domains": ["sensor", "weather"]
+}
