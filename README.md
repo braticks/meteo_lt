@@ -1,72 +1,91 @@
 # Meteo.lt Integration for Home Assistant
 
-This custom integration allows you to integrate weather data from the Lithuanian Hydrometeorological Service (Meteo.lt) into your Home Assistant instance.
+[English version below](#meteo-lt-integration-for-home-assistant-1)
 
-## Features
+## Meteo.lt integracija Home Assistant sistemai
 
-- Real-time weather data for Lithuanian locations
-- Temperature, humidity, wind speed, and weather condition sensors
-- Weather entity for a comprehensive weather overview
-- Configurable location
+Ši integracija leidžia gauti orų prognozes iš Meteo.lt paslaugos jūsų Home Assistant sistemoje.
 
-## Installation
+### Galimos vietovės
 
-### HACS (Custom Repository)
+Integracija palaiko visas vietoves, kurias teikia Meteo.lt API. Kai kurios populiariausios vietovės:
 
-1. Ensure that [HACS](https://hacs.xyz/) is installed.
-2. Go to HACS > Integrations.
-3. Click on the three dots in the top right corner and select "Custom repositories".
-4. Add the URL of this repository (https://github.com/braticks/meteo_lt) and select "Integration" as the category.
-5. Click "Add".
-6. Search for "Meteo.lt" in the HACS Integrations store.
-7. Click Install.
-8. Restart Home Assistant.
+- Vilnius
+- Kaunas
+- Klaipėda
+- Šiauliai
+- Panevėžys
+- Alytus
+- Marijampolė
+- Mažeikiai
+- Jonava
+- Utena
 
-### Manual Installation
+Pilną vietovių sąrašą galite rasti [Meteo.lt API dokumentacijoje](https://api.meteo.lt/#places).
 
-1. Download the `custom_components/meteo_lt` folder from this repository.
-2. Copy the folder into your Home Assistant's `custom_components` directory.
-3. Restart Home Assistant.
+### Prieinami jutikliai
 
-## Configuration
+Integracija sukuria šiuos jutiklius:
 
-1. In Home Assistant, go to Configuration > Integrations.
-2. Click the "+ ADD INTEGRATION" button.
-3. Search for "Meteo.lt" and select it.
-4. Enter the desired location (e.g., "vilnius", "kaunas", "klaipeda").
-5. Click "Submit".
+1. Temperatūra (°C)
+2. Drėgmė (%)
+3. Vėjo greitis (m/s)
+4. Oro sąlygos (aprašymas)
 
-## Available Entities
+Be to, sukuriamas orų objektas, kuris apjungia visą informaciją į vieną esybę.
 
-After setting up the integration, the following entities will be created:
+### Diegimas
 
-- `weather.meteo_lt_[location]`: Weather entity with overall weather information
-- `sensor.meteo_lt_temperature`: Current temperature
-- `sensor.meteo_lt_humidity`: Current humidity
-- `sensor.meteo_lt_wind_speed`: Current wind speed
+1. Įdiekite šią integraciją naudodami HACS arba rankiniu būdu nukopijuodami failus į savo `custom_components` aplanką.
+2. Perkraukite Home Assistant.
+3. Eikite į Integracijos ir pridėkite naują Meteo.lt integraciją.
+4. Įveskite norimą vietovę.
 
-## Troubleshooting
+### Naudojimas
 
-- If you encounter any issues, check the Home Assistant logs for error messages related to the Meteo.lt integration.
-- Ensure that you have a stable internet connection.
-- Verify that the Meteo.lt API is operational and that you're using a valid location.
-
-## Contributing
-
-Contributions to this project are welcome! Please feel free to submit pull requests or open issues on the GitHub repository.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Disclaimer
-
-This integration is not officially affiliated with or endorsed by the Lithuanian Hydrometeorological Service. Use of the Meteo.lt API is subject to their terms and conditions.
-
-## Support
-
-If you need help or want to report a bug, please open an issue on the GitHub repository.
+Po sėkmingo diegimo, galėsite naudoti Meteo.lt duomenis savo prietaisų skydeliuose, automatizacijose ir skriptuose.
 
 ---
 
-Enjoy your local Lithuanian weather data in Home Assistant!
+## Meteo.lt Integration for Home Assistant
+
+This integration allows you to get weather forecasts from the Meteo.lt service in your Home Assistant system.
+
+### Available Locations
+
+The integration supports all locations provided by the Meteo.lt API. Some of the most popular locations include:
+
+- Vilnius
+- Kaunas
+- Klaipėda
+- Šiauliai
+- Panevėžys
+- Alytus
+- Marijampolė
+- Mažeikiai
+- Jonava
+- Utena
+
+For a full list of locations, please refer to the [Meteo.lt API documentation](https://api.meteo.lt/#places).
+
+### Available Sensors
+
+The integration creates the following sensors:
+
+1. Temperature (°C)
+2. Humidity (%)
+3. Wind Speed (m/s)
+4. Weather Condition (description)
+
+Additionally, a weather entity is created that combines all this information into a single entity.
+
+### Installation
+
+1. Install this integration using HACS or manually by copying the files to your `custom_components` folder.
+2. Restart Home Assistant.
+3. Go to Integrations and add a new Meteo.lt integration.
+4. Enter the desired location.
+
+### Usage
+
+After successful installation, you will be able to use Meteo.lt data in your dashboards, automations, and scripts.
