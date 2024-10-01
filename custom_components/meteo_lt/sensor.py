@@ -1,4 +1,5 @@
 """Sensor platform for Meteo.lt integration."""
+import logging
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -8,15 +9,21 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 from .coordinator import MeteoLtDataUpdateCoordinator
 
+_LOGGER = logging.getLogger(__name__)
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up Meteo.lt sensor entries."""
+    _LOGGER.debug("Setting up Meteo.lt sensors for entry: %s", entry.entry_id)
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
-    async_add_entities([
+    entities = [
         MeteoLtTemperatureSensor(coordinator, entry),
         MeteoLtHumiditySensor(coordinator, entry),
         MeteoLtWindSpeedSensor(coordinator, entry)
-    ])
+    ]
+    
+    async_add_entities(entities)
+    _LOGGER.debug("Added %d Meteo.lt sensor entities", len(entities))
 
 class MeteoLtSensor(CoordinatorEntity, SensorEntity):
     """Base class for Meteo.lt sensors."""
