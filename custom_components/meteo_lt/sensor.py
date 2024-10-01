@@ -1,56 +1,35 @@
 """Sensor platform for Meteo.lt integration."""
-import logging
-import aiohttp
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator, UpdateFailed
-from datetime import timedelta
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, CONF_LOCATION
+from .const import DOMAIN
+from .coordinator import MeteoLtDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up Meteo.lt sensor entries."""
-    location = entry.data[CONF_LOCATION]
-    coordinator = MeteoLtDataUpdateCoordinator(hass, location)
-    await coordinator.async_config_entry_first_refresh()
+    coordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities([
-        MeteoLtTemperatureSensor(coordinator),
-        MeteoLtHumiditySensor(coordinator),
-        MeteoLtWindSpeedSensor(coordinator)
+        MeteoLtTemperatureSensor(coordinator, entry),
+        MeteoLtHumiditySensor(coordinator, entry),
+        MeteoLtWindSpeedSensor(coordinator, entry)
     ])
 
-class MeteoLtDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching Meteo.lt data."""
-
-    def __init__(self, hass: HomeAssistant, location: str):
-        """Initialize."""
-        self.location = location
-        super().__init__(
-            hass,
-            _LOGGER,
-            name=DOMAIN,
-            update_interval=timedelta(minutes=10),
-        )
-
-    async def _async_update_data(self):
-        """Fetch data from Meteo.lt."""
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://api.meteo.lt/v1/places/{self.location}/forecasts/long-term") as response:
-                if response.status != 200:
-                    raise UpdateFailed(f"Error fetching data: {response.status}")
-                return await response.json()
-
 class MeteoLtSensor(CoordinatorEntity, SensorEntity):
-    """Base class for Meteo.lt sensor."""
+    """Base class for Meteo.lt sensors."""
 
-    def __init__(self, coordinator: MeteoLtDataUpdateCoordinator):
+    def __init__(self, coordinator: MeteoLtDataUpdateCoordinator, config_entry: ConfigEntry):
         """Initialize the sensor."""
         super().__init__(coordinator)
+        self._config_entry = config_entry
+        self._attr_device_info = {
+            "identifiers": {(DOMAIN, config_entry.entry_id)},
+            "name": f"Meteo.lt {coordinator.location}",
+            "manufacturer": "Meteo.lt",
+        }
 
 class MeteoLtTemperatureSensor(MeteoLtSensor):
     """Representation of a Meteo.lt temperature sensor."""
@@ -58,7 +37,12 @@ class MeteoLtTemperatureSensor(MeteoLtSensor):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "Meteo.lt Temperature"
+        return f"Meteo.lt Temperature {self.coordinator.location}"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self._config_entry.entry_id}_temperature"
 
     @property
     def state(self):
@@ -76,7 +60,12 @@ class MeteoLtHumiditySensor(MeteoLtSensor):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "Meteo.lt Humidity"
+        return f"Meteo.lt Humidity {self.coordinator.location}"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self._config_entry.entry_id}_humidity"
 
     @property
     def state(self):
@@ -94,7 +83,12 @@ class MeteoLtWindSpeedSensor(MeteoLtSensor):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "Meteo.lt Wind Speed"
+        return f"Meteo.lt Wind Speed {self.coordinator.location}"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self._config_entry.entry_id}_wind_speed"
 
     @property
     def state(self):
