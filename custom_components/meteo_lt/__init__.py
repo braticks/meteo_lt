@@ -2,12 +2,18 @@
 import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+import voluptuous as vol
+import homeassistant.helpers.config_validation as cv
 
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = ["sensor", "weather"]
+
+CONFIG_SCHEMA = vol.Schema(
+    {DOMAIN: vol.Schema({})}, extra=vol.ALLOW_EXTRA
+)
 
 async def async_setup(hass: HomeAssistant, config: dict):
     """Set up the Meteo.lt component."""
