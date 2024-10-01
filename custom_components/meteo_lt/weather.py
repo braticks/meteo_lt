@@ -15,8 +15,6 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     """Set up Meteo.lt weather platform."""
     location = entry.data[CONF_LOCATION]
-    _LOGGER.debug("Setting up Meteo.lt weather for location: %s", location)
-
     coordinator = MeteoLtDataUpdateCoordinator(hass, location)
     await coordinator.async_config_entry_first_refresh()
 
@@ -28,8 +26,12 @@ class MeteoLtDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(self, hass: HomeAssistant, location: str):
         """Initialize."""
         self.location = location
-        update_interval = timedelta(minutes=10)
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=update_interval)
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=DOMAIN,
+            update_interval=timedelta(minutes=10),
+        )
 
     async def _async_update_data(self):
         """Fetch data from Meteo.lt."""
