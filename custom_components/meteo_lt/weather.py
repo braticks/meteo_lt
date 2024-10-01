@@ -11,17 +11,18 @@ from .coordinator import MeteoLtDataUpdateCoordinator
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Set up Meteo.lt weather platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([MeteoLtWeather(coordinator)])
+    async_add_entities([MeteoLtWeather(coordinator, entry)])
 
 class MeteoLtWeather(CoordinatorEntity, WeatherEntity):
     """Representation of a weather condition."""
 
-    def __init__(self, coordinator: MeteoLtDataUpdateCoordinator):
+    def __init__(self, coordinator: MeteoLtDataUpdateCoordinator, config_entry: ConfigEntry):
         """Initialize the weather entity."""
         super().__init__(coordinator)
-        self._attr_unique_id = f"{coordinator.location}_weather"
+        self._config_entry = config_entry
+        self._attr_unique_id = f"{config_entry.entry_id}_weather"
         self._attr_device_info = {
-            "identifiers": {(DOMAIN, coordinator.location)},
+            "identifiers": {(DOMAIN, config_entry.entry_id)},
             "name": f"Meteo.lt {coordinator.location}",
             "manufacturer": "Meteo.lt",
         }
