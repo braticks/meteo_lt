@@ -11,6 +11,9 @@
     },
     "error": {
       "invalid_location": "Invalid location"
+    },
+    "abort": {
+      "already_configured": "This location is already configured"
     }
   }
 }
