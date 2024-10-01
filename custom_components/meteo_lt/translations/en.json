@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Meteo.lt",
+        "description": "Enter the location for which you want to fetch weather data.",
+        "data": {
+          "location": "Location"
+        }
+      }
+    },
+    "error": {
+      "invalid_location": "Invalid location"
+    }
+  }
+}
